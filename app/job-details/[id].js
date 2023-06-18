@@ -28,6 +28,9 @@ const JobDetails = () => {
                 />
                 break;
             case "About":
+                return <JobAbout 
+                    info={data[0].job_description ?? "No data provided"}
+                />
                 break;
             case "Responsibilities":
                 break;
