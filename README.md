@@ -1,14 +1,5 @@
-# Expo Router Example
+# JobLinx - Job Finder Mobile App
 
-Use [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory.
+This project is still underdevelopment.
 
-## 🚀 How to use
-
-```sh
-npx create-expo-app -e with-router
-```
-
-## 📝 Notes
-
-- [Expo Router: Docs](https://expo.github.io/router)
-- [Expo Router: Repo](https://github.com/expo/router)
+You can view the mobile ui design concept [here](https://www.figma.com/file/4wB2FteQjUDwzFDW0CnBst/JobLinx-UI?type=design&node-id=0%3A1&t=fxprkjyKwgOJB4lL-1).
