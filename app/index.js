@@ -1,69 +1,114 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, Image, FlatList, useWindowDimensions, Animated } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
 import { COLORS, icons, images, SIZES } from '../constants';
-import { Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome } from '../components';
 import { TextInput } from 'react-native-gesture-handler';
 
-const Home = () => {
+import search_vector from '../assets/images/search_vector.png'
+import share_vector from '../assets/images/search_vector.png'
+import save_vector from '../assets/images/search_vector.png'
+
+
+const slideContents = [
+    {
+        id: 0,
+        title: "Find jobs easily",
+        description: "Browse through a lot of job opportunities from various job posting platforms",
+        vector_image: search_vector,
+    },
+    {
+        id: 1,
+        title: "Share with friends",
+        description: "Browse through a lot of job opportunities from various job posting platforms",
+        vector_image: share_vector
+    },
+    {
+        id: 2,
+        title: "Save jobs that you like",
+        description: "Browse through a lot of job opportunities from various job posting platforms",
+        vector_image: save_vector
+    },
+];
+
+const Paginator = ({ data, scrollX}) => {
+    const { width } = useWindowDimensions();
+
+    return (
+        <View style={{ flexDirection: 'row', height: 64 }}>
+            { data.map((_, i) => {
+                const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
+                const dotWidth = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [10, 20, 10],
+                    extrapolate: 'clamp',
+                });
+                const opacity = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.3, 1, 0.3],
+                    extrapolate: 'clamp'
+                })
+                return <Animated.View style={[{ height: 10, borderRadius: 5, backgroundColor: COLORS.primary, marginHorizontal: 8}, {width: dotWidth, opacity}]} key={i.toString()}/>
+            }) }
+        </View>
+    );
+};
+
+const OnBoardingSlide = ({ item }) => {
+    const { width } = useWindowDimensions();
+
+    return (
+        <View style={[{flex: 1, alignItems: 'center', justifyContent: 'center'}, { width }]}>
+            <Text style={{fontWeight: 'bold', fontSize: 32, marginBottom: 20}}>
+                {item.title}
+            </Text>
+            <Image
+                style={{ width: 320, height: 200 }}
+                source={item.vector_image}
+                resizeMode='contain'
+            />
+            <Text style={{textAlign: 'center', width: "60%"}}>
+                {item.description}
+            </Text>
+            
+        </View>
+    );
+};
+
+const OnBoarding = () => {
     const router = useRouter();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [emailInput, setEmailInput] = useState('');
-    const [passInput, setPassInput] = useState('');
+    const scrollX = useRef(new Animated.Value(0)).current;
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const slidesRef = useRef(null);
+    const viewableItemsChanged = useRef(({ viewableItems }) => {
+        setCurrentIndex(viewableItems[0].index)
+    }).current;
+    const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
     return (
         <SafeAreaView style={{flex: 1, backgroundColor: COLORS.lightWhite}}>
-            <Stack.Screen
-                options={{
-                    headerStyle: { backgroundColor: COLORS.lightWhite },
-                    headerShadowVisible: false,
-                    headerTitle: "",
-                }}
+            <Stack.Screen options={{ headerShown: false }} />
+
+            <FlatList 
+                data={slideContents}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => <OnBoardingSlide item={item} />}
+                onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX}}}], { useNativeDriver: false })}
+                scrollEventThrottle={32}
+                onViewableItemsChanged={viewableItemsChanged}
+                viewabilityConfig={viewConfig}
+                ref={slidesRef}
             />
-            <View style={{ paddingHorizontal: 20, paddingTop: 100, paddingBottom: 20 }}>
-                <Text style={{ fontWeight: '900', fontSize: 32 }}>Welcome to JobLinx</Text>
-                <Text style={{ fontSize: 18, color: COLORS.gray }}>Find the perfect job for you!</Text>
+
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Paginator data={slideContents} scrollX={scrollX}/>
             </View>
 
-            <View style={{ paddingHorizontal: 20, marginTop: 50}}>
-                <TextInput 
-                style={{ 
-                    width: "100%", 
-                    height: 50, 
-                    backgroundColor: COLORS.white, 
-                    paddingHorizontal: 20, 
-                    borderWidth: 1, 
-                    borderColor: COLORS.gray2, 
-                    borderRadius: 10,
-                    marginBottom: 20
-                }} 
-                placeholder='Enter username or email'/>
-
-                <TextInput 
-                style={{ 
-                    width: "100%", 
-                    height: 50, 
-                    backgroundColor: COLORS.white, 
-                    paddingHorizontal: 20, 
-                    borderWidth: 1, 
-                    borderColor: COLORS.gray2, 
-                    borderRadius: 10,
-                    marginBottom: 50
-                }} 
-                placeholder='Enter password'/>
-            </View>    
-
-            <View style={{ paddingHorizontal: 20 }}>
-                <TouchableOpacity style={{ width: "100%", height: 50, backgroundColor: COLORS.primary, borderRadius: 10 }} onPress={() => {}}>
-                    <Text style={{ textAlign: 'center', textAlignVertical: 'center', color: COLORS.white, height: "100%" }}>
-                        Sign in to our platform
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        
         </SafeAreaView>
     );
 };
 
-export default Home;
+export default OnBoarding;
