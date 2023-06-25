@@ -6,10 +6,10 @@ import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
 
 const Layout = () => {
-    const [fontsLoaded] = useFonts({
-        DMBold: require('../assets/fonts/DMSans-Bold.ttf'),
-        DMMedium: require('../assets/fonts/DMSans-Medium.ttf'),
-        DMRegular: require('../assets/fonts/DMSans-Regular.ttf'),
+    let [fontsLoaded] = useFonts({
+        'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
+        'Poppins-Light': require('../assets/fonts/Poppins-Light.ttf'),
+        'Poppins-Regular': require('../assets/fonts/Poppins-Regular.ttf'),
     })
 
     const onLayoutRootView = useCallback(async () => {

@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, Image } from 'react-native';
+import { Text, SafeAreaView, Image } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import Onboarding from 'react-native-onboarding-swiper';
 import { COLORS } from '../../constants';
@@ -32,7 +32,6 @@ const OnBoarding = () => {
             <Stack.Screen options={{ headerShown: false }} />
 
             <Onboarding 
-                nextLabel={Next}
                 pages={slideContents}
                 bottomBarHighlight={false}
                 bottomBarHeight={80}

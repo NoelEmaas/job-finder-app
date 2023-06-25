@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
-import { COLORS } from '../../constants';
+import { COLORS, FONT } from '../../constants';
 import { TextInput } from 'react-native-gesture-handler';
 
 const Home = () => {
@@ -20,7 +20,7 @@ const Home = () => {
                 }}
             />
             <View style={{ paddingHorizontal: 20, paddingTop: 100, paddingBottom: 20 }}>
-                <Text style={{ fontWeight: '900', fontSize: 32 }}>Welcome to JobLinx</Text>
+                <Text style={{ fontFamily: FONT.bold, fontSize: 32}}>Welcome to JobLinx</Text>
                 <Text style={{ fontSize: 18, color: COLORS.gray }}>Find the perfect job for you!</Text>
             </View>
 
